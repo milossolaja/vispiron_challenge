@@ -9,9 +9,6 @@ class Color:
     """
 
     def __init__(self, hex_code: str) -> None:
-        """
-        Initialize a Color object with a hex code
-        """
         self.hex_code: str = hex_code.upper()
         self.r: int
         self.g: int
@@ -36,12 +33,9 @@ class Color:
         Calculate the perceived brightness using a weighted formula
         """
         return math.sqrt(
-            0.241 *
-            self.r**2 +
-            0.691 *
-            self.g**2 +
-            0.068 *
-            self.b**2)
+            0.241 * self.r**2 +
+            0.691 * self.g**2 +
+            0.068 * self.b**2)
 
     def set_name(self, name: str) -> None:
         """

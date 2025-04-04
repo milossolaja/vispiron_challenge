@@ -5,13 +5,11 @@ from services.color_api import ColorApiService
 
 class BrightestColorFinder:
     """
-    Class to find the brightest color from a list of hex color codes
+    Class to find the brightest color from a list of Colors
     """
 
     def __init__(self, color_list: List[str]) -> None:
-        """
-        Initialize with a list of hex color codes
-        """
+        
         self.colors: List[Color] = [Color(color) for color in color_list]
 
     def find_brightest(self) -> Optional[Color]:

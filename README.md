@@ -73,7 +73,7 @@ I will calculate closest matching color using Euclidean distance
 ### Structure
 
 ```
-vispiron_task/
+vispiron_challenge/
 │
 ├── __init__.py           # Makes the folder a package
 ├── main.py               # Entry point for the application
@@ -94,7 +94,7 @@ vispiron_task/
 
 ### Run
 
-To run script including example
+To run script including example:
 ```
 python main.py
 ```
