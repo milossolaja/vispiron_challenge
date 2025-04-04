@@ -1,3 +1,4 @@
+
 ## Approach
 
 To generate tests:
@@ -67,6 +68,28 @@ This is API response that is returned with all available colors:
 
 I will calculate closest matching color using Euclidean distance
 
+```
+
+### Structure
+
+```
+vispiron_task/
+│
+├── __init__.py           # Makes the folder a package
+├── main.py               # Entry point for the application
+├── tests.py              # Unittest tests 
+│
+├── models/               # Core data models
+│   ├── __init__.py
+│   └── color.py          # Contains the Color class
+│
+├── services/             # Services for additional functionality
+│   ├── __init__.py
+│   └── color_api.py      # API interaction logic
+│
+└── utils/                # Utility functions and helper classes
+    ├── __init__.py
+    └── color_finder.py   # Contains the BrightestColorFinder class
 ```
 
 ### Run

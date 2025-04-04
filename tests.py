@@ -1,7 +1,9 @@
 import unittest
 import math
 from unittest.mock import patch, Mock
-from main import Color, BrightestColorFinder
+from utils.color_finder import BrightestColorFinder
+from models.color import Color
+from services.color_api import ColorApiService
 
 
 class TestColor(unittest.TestCase):
@@ -46,6 +48,8 @@ class TestColor(unittest.TestCase):
         expected_brightness = round(math.sqrt(0.068 * 255**2), 2)
         self.assertAlmostEqual(blue.brightness, expected_brightness, places=2)
 
+
+class TestColorApiService(unittest.TestCase):
     @patch('requests.get')
     def test_fetch_color_names(self, mock_get):
         # Mock the API response
@@ -64,16 +68,15 @@ class TestColor(unittest.TestCase):
         }
         mock_get.return_value = mock_response
 
-        color = Color("#FFFFFF")
-        color_data = color.fetch_color_names()
+        color_data = ColorApiService.fetch_color_names()
         self.assertEqual(len(color_data), 3)
         self.assertEqual(color_data[0]["name"], "White")
 
         mock_response.status_code = 404
-        self.assertIsNone(color.fetch_color_names())
+        self.assertIsNone(ColorApiService.fetch_color_names())
 
         mock_get.side_effect = Exception("API Connection Error")
-        self.assertIsNone(color.fetch_color_names())
+        self.assertIsNone(ColorApiService.fetch_color_names())
 
     @patch('requests.get')
     def test_find_closest_color_name(self, mock_get):
@@ -95,18 +98,18 @@ class TestColor(unittest.TestCase):
 
         # Almost black
         color = Color("#001000")
-        color.find_closest_color_name()
+        ColorApiService.find_closest_color_name(color)
         self.assertEqual(color.name, "Black")
 
-        # ALmost white
+        # Almost white
         color = Color("#FFFFFE")
-        color.find_closest_color_name()
+        ColorApiService.find_closest_color_name(color)
         self.assertEqual(color.name, "White")
 
         # Test with API failure
         mock_response.status_code = 404
         color = Color("#FFFFFF")
-        color.find_closest_color_name()
+        ColorApiService.find_closest_color_name(color)
 
         self.assertEqual(color.name, "Unknown")
 
@@ -115,7 +118,7 @@ class TestColor(unittest.TestCase):
         mock_get.side_effect = Exception("API Connection Error")
 
         color = Color("#FFFFFF")
-        color.find_closest_color_name()
+        ColorApiService.find_closest_color_name(color)
         self.assertEqual(color.name, "Unknown")
 
 
@@ -131,23 +134,14 @@ class TestBrightestColorFinder(unittest.TestCase):
         finder = BrightestColorFinder([])
         self.assertIsNone(finder.find_brightest())
 
-    @patch('requests.get')
-    def test_find_brightest_with_name(self, mock_get):
-        # Mock the API response
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "status": 200,
-            "statusText": "OK",
-            "message": "All css colors retrieved.",
-            "count": 3,
-            "colors": [
-                {"name": "White", "hex": "FFFFFF", "rgb": "255,255,255"},
-                {"name": "Black", "hex": "000000", "rgb": "0,0,0"},
-                {"name": "Red", "hex": "FF0000", "rgb": "255,0,0"}
-            ]
-        }
-        mock_get.return_value = mock_response
+    @patch('services.color_api.ColorApiService.fetch_color_names')
+    def test_find_brightest_with_name(self, mock_fetch_color_names):
+        # Mock the color data
+        mock_fetch_color_names.return_value = [
+            {"name": "White", "hex": "FFFFFF", "rgb": "255,255,255"},
+            {"name": "Black", "hex": "000000", "rgb": "0,0,0"},
+            {"name": "Red", "hex": "FF0000", "rgb": "255,0,0"}
+        ]
 
         colors = ["#AABBCC", "#154331", "#A0B1C2", "#000000", "#FFFFFF"]
         finder = BrightestColorFinder(colors)
@@ -158,25 +152,16 @@ class TestBrightestColorFinder(unittest.TestCase):
 
 
 class TestIntegration(unittest.TestCase):
-    @patch('requests.get')
-    def test_example_input(self, mock_get):
-        # Mock the API response with the color data
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "status": 200,
-            "statusText": "OK",
-            "message": "All css colors retrieved.",
-            "count": 5,
-            "colors": [
-                {"name": "White", "hex": "FFFFFF", "rgb": "255,255,255"},
-                {"name": "Black", "hex": "000000", "rgb": "0,0,0"},
-                {"name": "Red", "hex": "FF0000", "rgb": "255,0,0"},
-                {"name": "Green", "hex": "00FF00", "rgb": "0,255,0"},
-                {"name": "Blue", "hex": "0000FF", "rgb": "0,0,255"}
-            ]
-        }
-        mock_get.return_value = mock_response
+    @patch('services.color_api.ColorApiService.fetch_color_names')
+    def test_example_input(self, mock_fetch_color_names):
+        # Mock the color data
+        mock_fetch_color_names.return_value = [
+            {"name": "White", "hex": "FFFFFF", "rgb": "255,255,255"},
+            {"name": "Black", "hex": "000000", "rgb": "0,0,0"},
+            {"name": "Red", "hex": "FF0000", "rgb": "255,0,0"},
+            {"name": "Green", "hex": "00FF00", "rgb": "0,255,0"},
+            {"name": "Blue", "hex": "0000FF", "rgb": "0,0,255"}
+        ]
 
         # Test with the example input from the problem statement
         color_list = ["#AABBCC", "#154331", "#A0B1C2", "#000000", "#FFFFFF"]
