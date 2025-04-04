@@ -175,7 +175,9 @@ class TestIntegration(unittest.TestCase):
         self.assertEqual(brightest.name, "White")
 
         # Check the string representation
-        self.assertEqual(str(brightest), "#FFFFFF (r=255, g=255, b=255), called White")
+        self.assertEqual(
+            str(brightest),
+            "#FFFFFF (r=255, g=255, b=255), called White")
 
 
 if __name__ == '__main__':

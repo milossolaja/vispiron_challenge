@@ -5,23 +5,18 @@ from services.color_api import ColorApiService
 
 class BrightestColorFinder:
     """
-    Class to find the brightest color from a list of hex color codes.
+    Class to find the brightest color from a list of hex color codes
     """
+
     def __init__(self, color_list: List[str]) -> None:
         """
-        Initialize with a list of hex color codes.
-        
-        Args:
-            color_list: A list of hex color strings.
+        Initialize with a list of hex color codes
         """
         self.colors: List[Color] = [Color(color) for color in color_list]
 
     def find_brightest(self) -> Optional[Color]:
         """
-        Find the color with the highest brightness value.
-        
-        Returns:
-            The Color object with the highest brightness, or None if the list is empty.
+        Find the color with the highest brightness value
         """
         if not self.colors:
             return None
@@ -30,10 +25,7 @@ class BrightestColorFinder:
 
     def find_brightest_with_name(self) -> Optional[Color]:
         """
-        Find the brightest color and fetch its name.
-        
-        Returns:
-            The brightest Color object with its name set, or None if the list is empty.
+        Find the brightest color and fetch its name
         """
         brightest = self.find_brightest()
         if brightest:

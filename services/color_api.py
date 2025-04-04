@@ -6,17 +6,14 @@ from models.color import Color
 
 class ColorApiService:
     """
-    Service class for interacting with the color API.
+    Service class for interacting with the color API
     """
     API_URL: str = "https://www.csscolorsapi.com/api/colors"
-    
+
     @staticmethod
     def fetch_color_names() -> Optional[List[Dict[str, Any]]]:
         """
-        Fetch color names from CSS Colors API.
-        
-        Returns:
-            A list of color dictionaries if successful, None otherwise.
+        Fetch color names from CSS Colors API
         """
         try:
             response = requests.get(ColorApiService.API_URL)
@@ -28,18 +25,14 @@ class ColorApiService:
                 return None
         except Exception:
             return None
-    
+
     @staticmethod
     def find_closest_color_name(color: Color) -> None:
         """
-        Find the closest color name for a given Color object.
-        
-        Args:
-            color: The Color object to find a name for.
+        Find the closest color name for a given Color object
         """
         colors = ColorApiService.fetch_color_names()
 
-        # Check if colors is None (error case) and handle it
         if colors is None:
             color.set_name('Unknown')
             return
@@ -59,7 +52,8 @@ class ColorApiService:
                 g = int(color_data['hex'][2:4], 16)
                 b = int(color_data['hex'][4:6], 16)
                 # Euclidean distance in RGB space
-                distance = math.sqrt((color.r - r)**2 + (color.g - g)**2 + (color.b - b)**2)
+                distance = math.sqrt((color.r - r)**2 +
+                                     (color.g - g)**2 + (color.b - b)**2)
 
                 if distance < min_distance:
                     min_distance = distance
