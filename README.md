@@ -1,27 +1,33 @@
 ## Approach
 
-To generate tests I initially thought of my approach, potential errors and tests that need to be covered, used Claude as starting point to generate different test cases, and afterwardas I selected few intereting ones and adapted them.
+To generate tests:
+
+    1. I initially thought of my approach and classes I am going to use.
+    2. I identified critical test scenarios for each component of the system.
+    3. I used Claude as a starting point to generate a comprehensive set of test cases. 
+    4. After reviewing the generated tests, I selected the most relevant and valuable ones, then adapted and refined them to suit my specific implementation needs. 
+
 
 Prompt that I used:
 ```
 I am developing a color brightness calculator and name finder, write test cases using python unittest that cover:
-1. **Color Parsing Tests**:
+1. Color Parsing Tests:
    * Parse standard hex colors with and without # prefix
    * Verify correct RGB component extraction
-2. **Brightness Calculation Tests**:
+2. Brightness Calculation Tests:
    * Calculate brightness for white (maximum brightness)
    * Calculate brightness for black (minimum brightness)
    * Calculate brightness for primary colors (red, green, blue)
    * Verify precision of formula: sqrt(0.241*R^2 + 0.691*G^2 + 0.068*B^2)
-3. **API Integration Tests**:
+3. API Integration Tests:
    * Mock successful API responses with sample color data
    * Handle API failure (404 responses)
    * Handle network exceptions
    * Verify proper extraction of color names
-4. **Color Matching Tests**:
+4. Color Matching Tests:
    * Find exact matches by hex code
    * Find closest matches for similar colors
-5. **Integration Tests**:
+5. Integration Tests:
    * End-to-end test with sample inputs
    * Verify brightest color selection from a list
    * Confirm correct RGB values and name assignment
@@ -61,6 +67,19 @@ This is API response that is returned with all available colors:
 
 I will calculate closest matching color using Euclidean distance
 
+```
+
+### Run
+
+To run script including example
+```
+python main.py
+```
+
+To run tests:
+```
+python tests.py 
+python -m unittest
 ```
 
 ## Exercise text
